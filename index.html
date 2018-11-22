@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>Hello to Elm</title>
+  <script src="elm-side.js"></script>
+</head>
+  <body>
+    <h1>HTML Side</h1>
+    <p>Static content goes here</p>
+
+    <!-- Elm mounts here -->
+    <div id="elm-mount"></div>
+
+    <!-- JS glue code -->
+    <script>
+      var app = Elm.ElmSide.init({
+        node: document.getElementById('elm-mount'),
+        flags: {
+          nameToSpecies: {
+            "Colby": "cat",
+            "Roscoe": "cat",
+            "Jade": "dog"
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

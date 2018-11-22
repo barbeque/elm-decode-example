@@ -19,6 +19,7 @@ type Msg = Pet
 
 getAnimalSpecies: String -> (Dict String String) -> String
 getAnimalSpecies name nameToSpecies =
+  -- simple dictionary lookup, but it can fail
   case Dict.get name nameToSpecies of
     Just petSpecies -> petSpecies
     _ -> "Could not find a pet named " ++ name
@@ -26,7 +27,9 @@ getAnimalSpecies name nameToSpecies =
 init : Flags -> ( Model, Cmd Msg )
 init flags =
   let
+    -- build a decoder
     jsonToDictDecoder = Json.Decode.dict (string)
+    -- use the decoder on the object passed in by flags
     decodedSpeciesDict =
       case decodeValue jsonToDictDecoder flags.nameToSpecies of
         Ok val -> val

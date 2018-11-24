@@ -24,16 +24,23 @@ getAnimalSpecies name nameToSpecies =
     Just petSpecies -> petSpecies
     _ -> "Could not find a pet named " ++ name
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
+{-| Decode the JSON object passed in from the HTML page's flags
+into an Elm dictionary that we can use -}
+decodeDict : Json.Decode.Value -> (Dict String String)
+decodeDict jsonSpeciesDict =
   let
     -- build a decoder
     jsonToDictDecoder = Json.Decode.dict (string)
+  in
     -- use the decoder on the object passed in by flags
-    decodedSpeciesDict =
-      case decodeValue jsonToDictDecoder flags.nameToSpecies of
-        Ok val -> val
-        Err message -> Dict.fromList [] -- don't have a better thing to do here.
+    case decodeValue jsonToDictDecoder jsonSpeciesDict of
+      Ok dict -> dict
+      Err message -> Dict.fromList [] -- don't have a better thing to do here.
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+  let
+    decodedSpeciesDict = decodeDict flags.nameToSpecies
   in
     ( { nameToSpecies = decodedSpeciesDict }, Cmd.none )
 
